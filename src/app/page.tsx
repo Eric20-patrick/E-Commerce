@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const Home = () => {
   return (
     <div>
-      <Button>Click me </Button>
+      <Button> oi</Button>
     </div>
   );
 };
