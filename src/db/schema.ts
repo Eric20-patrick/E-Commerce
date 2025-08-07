@@ -9,14 +9,14 @@ export const categoryTable = pgTable("category", {
   id: uuid().primaryKey().defaultRandom(),
   name: text().notNull(),
   slug: text().notNull().unique(),
-  createdAt: timestamp().notNull().defaultNow(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const categoryRelation = relations(categoryTable, ({ many }) => ({
-  products: many(productTbale),
+  products: many(productTable),
 }));
 
-export const productTbale = pgTable("product", {
+export const productTable = pgTable("product", {
   id: uuid().primaryKey().defaultRandom(),
   categoryId: uuid("category_id")
     .notNull()
@@ -27,11 +27,19 @@ export const productTbale = pgTable("product", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const productRelation = relations(productTable, ({ one, many }) => ({
+  category: one(categoryTable, {
+    fields: [productTable.categoryId],
+    references: [categoryTable.id],
+  }),
+  variants: many(productVariantTable),
+}));
+
 export const productVariantTable = pgTable("product_variant", {
   id: uuid().primaryKey().defaultRandom(),
   productId: uuid("product_id")
     .notNull()
-    .references(() => productTbale.id),
+    .references(() => productTable.id),
   name: text().notNull(),
   slug: text().notNull().unique(),
   color: text().notNull(),
@@ -40,9 +48,12 @@ export const productVariantTable = pgTable("product_variant", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const productRelation = relations(productTbale, ({ one }) => ({
-  category: one(categoryTable, {
-    fields: [productTbale.categoryId],
-    references: [categoryTable.id],
+export const productVariantRelations = relations(
+  productVariantTable,
+  ({ one }) => ({
+    product: one(productTable, {
+      fields: [productVariantTable.productId],
+      references: [productTable.id],
+    }),
   }),
-}));
+);
