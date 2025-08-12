@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 const Home = () => {
   return (
     <div>
-      <Button> oi</Button>
+      <Button> r</Button>
     </div>
   );
 };
