@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import SignInForm from "./components/sign-in-form";
+import SignUpForm from "./components/singn-up-form";
 
 const Authentication = () => {
   return (
@@ -25,29 +26,7 @@ const Authentication = () => {
           <SignInForm />
         </TabsContent>
         <TabsContent value="sign-up">
-          <Card>
-            <CardHeader>
-              <CardTitle>Criar conta</CardTitle>
-              <CardDescription>Crie uma conta para continuar</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="name">Nome</Label>
-                <Input id="name" placeholder="Digite seu nome" />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" placeholder="Digite seu email" />
-              </div>
-              <div className="grid gap-3">
-                <label htmlFor="password"> Senha </label>
-                <Input id="Password" placeholder="Digite sua senha" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Criar conta </Button>
-            </CardFooter>
-          </Card>
+          <SignUpForm />
         </TabsContent>
       </Tabs>
     </div>
