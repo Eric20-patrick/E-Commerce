@@ -21,15 +21,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
-const formSchema = z.object({
-  name: z.string({ message: "Digite seu nome" }),
-  email: z.email({ message: "Digite um email válido" }),
-  password: z
-    .string()
-    .min(8, { message: "A senha deve conter no minimo 8 caracteres" }),
-});
+const formSchema = z
+  .object({
+    name: z.string({ message: "Digite seu nome" }).trim().min(4, {
+      message: "Nome deve conter no minimo 4 caracteres",
+    }),
+    email: z.email({ message: "Digite um email válido" }),
+    password: z
+      .string()
+      .min(8, { message: "A senha deve conter no minimo 8 caracteres" }),
+    passwordConfirmation: z
+      .string()
+      .min(8, { message: "A senha deve conter no minimo 8 caracteres" }),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "As senhas não coincidem",
+    path: ["passwordConfirmation"],
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 const SignUpForm = () => {
@@ -39,6 +48,7 @@ const SignUpForm = () => {
       name: "",
       email: "",
       password: "",
+      passwordConfirmation: "",
     },
   });
   function onSubmit(values: FormValues) {
@@ -102,9 +112,27 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="passwordConfirmation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirme sua senha</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Confirme sua senha"
+                      type="password"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
           <CardFooter>
-            <Button type="submit">Entrar</Button>
+            <Button type="submit">Criar conta</Button>
           </CardFooter>
         </form>
       </Form>

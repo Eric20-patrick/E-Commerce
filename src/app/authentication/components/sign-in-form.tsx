@@ -25,9 +25,7 @@ import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
   email: z.email({ message: "Digite um email válido" }),
-  password: z
-    .string()
-    .min(8, { message: "A senha deve conter no minimo 8 caracteres" }),
+  password: z.string().min(8, { message: "Senha Inválida" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
