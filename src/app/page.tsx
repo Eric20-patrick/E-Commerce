@@ -1,10 +1,13 @@
+import { desc } from "drizzle-orm";
 import Image from "next/image";
 
-import { Button } from "@/components/ui/button";
+import CategorySelector from "@/components/ui/common/category-selector";
+import Footer from "@/components/ui/common/footer";
 import Headers from "@/components/ui/common/header";
+import MarcasParceiras from "@/components/ui/common/partnerBrands";
 import ProductsList from "@/components/ui/common/product-list";
 import { db } from "@/db";
-import { cn } from "@/lib/utils";
+import { productTable } from "@/db/schema";
 
 const Home = async () => {
   const products = await db.query.productTable.findMany({
@@ -12,6 +15,14 @@ const Home = async () => {
       variants: true,
     },
   });
+
+  const newlyCreatedProducts = await db.query.productTable.findMany({
+    orderBy: [desc(productTable.createdAt)],
+    with: {
+      variants: true,
+    },
+  });
+  const categories = await db.query.categoryTable.findMany({});
   return (
     <>
       <Headers />
@@ -27,7 +38,14 @@ const Home = async () => {
           />
         </div>
 
+        <h3 className="h-252px w-252px px-5 font-semibold">Marcas Parceiras</h3>
+        <MarcasParceiras />
+
         <ProductsList products={products} title="Mais vendidos" />
+
+        <div className="px-5">
+          <CategorySelector categories={categories} />
+        </div>
 
         <div className="px-5">
           <Image
@@ -39,6 +57,8 @@ const Home = async () => {
             className="h-auto w-full"
           />
         </div>
+        <ProductsList products={newlyCreatedProducts} title="Novidades" />
+        <Footer />
       </div>
     </>
   );
